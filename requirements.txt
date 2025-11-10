@@ -1,0 +1,21 @@
+# Zurvan Product Delivery Demo - Dependencies
+
+# Discrete Event Simulation (SimPy-based approach)
+simpy>=4.0.0
+
+# Core visualization - Streamlit (legacy)
+streamlit>=1.28.0
+folium>=0.14.0
+streamlit-folium>=0.15.0
+
+# Core visualization - Dash (real-time)
+dash>=2.14.0
+plotly>=5.17.0
+pandas>=2.0.0  # Required by Dash
+
+# Data handling
+numpy>=1.24.0
+
+# For future steps
+# matplotlib>=3.7.0  # Step 9: Cost graphs
+# pandas>=2.0.0      # Step 11: Results analysis

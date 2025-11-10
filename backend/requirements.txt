@@ -1,0 +1,13 @@
+# FastAPI Backend Requirements
+
+# FastAPI and ASGI server
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+
+# WebSocket support
+websockets>=12.0
+
+# Simulation dependencies (from main requirements.txt)
+simpy>=4.0.0
+numpy>=1.24.0

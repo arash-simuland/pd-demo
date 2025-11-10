@@ -1,0 +1,19 @@
+{
+  "name": "zurvan-visualization",
+  "version": "1.0.0",
+  "description": "D3.js + Three.js visualization for Zurvan product delivery demo",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "three": "^0.160.1",
+    "topojson-client": "^3.1.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.12"
+  }
+}

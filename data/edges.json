@@ -1,0 +1,22 @@
+{
+  "description": "Edges are computed dynamically based on geographic distance. This file defines the edge types and their properties.",
+  "edge_types": {
+    "distributor_to_center": {
+      "description": "Potential routing connection from distributor to manufacturing center",
+      "weight_calculation": "euclidean_distance",
+      "properties": {
+        "allows_orders": true,
+        "routing_cost_per_mile": 0.5
+      }
+    },
+    "center_to_center": {
+      "description": "Connection between manufacturing centers (for future multi-hop scenarios)",
+      "weight_calculation": "euclidean_distance",
+      "properties": {
+        "allows_transfers": false,
+        "note": "Reserved for future use"
+      }
+    }
+  },
+  "note": "Actual edge instances are created by graph_builder.py based on node locations"
+}

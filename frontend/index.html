@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zurvan Product Delivery - D3.js + Three.js</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        #app {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        #controls {
+            background: #2a2a2a;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        #btn-play {
+            background: #10b981;
+            color: white;
+        }
+
+        #btn-pause {
+            background: #f59e0b;
+            color: white;
+        }
+
+        #btn-reset {
+            background: #ef4444;
+            color: white;
+        }
+
+        #speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #speed-slider {
+            width: 150px;
+        }
+
+        #time-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #10b981;
+            font-family: monospace;
+            background: #1a1a1a;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        #main-container {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #visualization {
+            flex: 1;
+            position: relative;
+        }
+
+        #sidebar {
+            width: 300px;
+            background: #2a2a2a;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        #connection-status {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #ef4444;
+            color: white;
+            margin-left: auto;
+        }
+
+        #connection-status.connected {
+            background: #10b981;
+        }
+
+        /* Resizable sidebar */
+        #sidebar {
+            position: relative;
+        }
+
+        #resize-handle {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            cursor: ew-resize;
+            background: transparent;
+            z-index: 10;
+        }
+
+        #resize-handle:hover {
+            background: #667eea;
+        }
+
+        /* Node Details Panel */
+        .node-details {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #667eea;
+        }
+
+        .details-header {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #667eea;
+            text-transform: uppercase;
+        }
+
+        .detail-section {
+            margin-bottom: 12px;
+        }
+
+        .detail-node-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .detail-node-type {
+            font-size: 12px;
+            color: #10b981;
+            text-transform: capitalize;
+            margin-bottom: 2px;
+        }
+
+        .detail-node-location {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .detail-section-title {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin: 8px 0 6px 0;
+        }
+
+        .detail-state-list {
+            font-size: 12px;
+        }
+
+        .detail-item {
+            padding: 4px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #9ca3af;
+            margin-right: 6px;
+        }
+
+        /* Chat Interface */
+        #chat-container {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 2px solid #764ba2;
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+        }
+
+        #chat-header {
+            font-size: 14px;
+            color: #764ba2;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-message {
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .chat-user {
+            background: #667eea;
+            align-self: flex-end;
+            max-width: 80%;
+        }
+
+        .chat-assistant {
+            background: #2a2a2a;
+            align-self: flex-start;
+            max-width: 80%;
+        }
+
+        .chat-system {
+            background: #10b981;
+            color: #1a1a1a;
+            align-self: center;
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+
+        .chat-error {
+            background: #ef4444;
+            align-self: center;
+        }
+
+        .chat-role {
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            opacity: 0.7;
+        }
+
+        .chat-content {
+            line-height: 1.4;
+        }
+
+        #chat-input-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        #chat-input {
+            flex: 1;
+            background: #2a2a2a;
+            border: 1px solid #667eea;
+            border-radius: 6px;
+            padding: 8px;
+            color: white;
+            font-size: 12px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #chat-input:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+
+        #chat-send {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            min-width: 60px;
+        }
+
+        #chat-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="header">
+            <h1>🎬 Zurvan Product Delivery - Live Simulation</h1>
+            <div class="subtitle">D3.js + Three.js Visualization</div>
+        </div>
+
+        <div id="controls">
+            <button id="btn-play">▶ Play</button>
+            <button id="btn-pause">⏸ Pause</button>
+            <button id="btn-reset">🔄 Reset</button>
+
+            <div id="time-display">0.00 hrs</div>
+
+            <div id="speed-control">
+                <label for="speed-slider">Speed:</label>
+                <input type="range" id="speed-slider" min="0.1" max="10" step="0.1" value="1.0">
+                <span id="speed-value">1.0x</span>
+            </div>
+
+            <div id="connection-status">Connecting...</div>
+        </div>
+
+        <div id="main-container">
+            <div id="visualization">
+                <!-- Canvas for Three.js (Phase 3) -->
+                <!-- <canvas id="three-canvas"></canvas> -->
+                <!-- SVG created dynamically by D3 map.js -->
+            </div>
+
+            <div id="sidebar">
+                <div id="resize-handle"></div>
+                <!-- Node Details Panel -->
+                <div id="node-details" class="node-details" style="display: none;">
+                    <h3 class="details-header">Node Details</h3>
+                    <div class="detail-section">
+                        <div id="detail-node-name" class="detail-node-name"></div>
+                        <div id="detail-node-type" class="detail-node-type"></div>
+                        <div id="detail-node-location" class="detail-node-location"></div>
+                    </div>
+                    <div class="detail-section">
+                        <h4 class="detail-section-title">Current State</h4>
+                        <div id="detail-node-state" class="detail-state-list"></div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Total Inventory</div>
+                    <div class="stat-value" id="stat-inventory">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Orders Placed</div>
+                    <div class="stat-value" id="stat-orders">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Orders Fulfilled</div>
+                    <div class="stat-value" id="stat-fulfilled">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Pending Orders</div>
+                    <div class="stat-value" id="stat-pending">0</div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div id="chat-container">
+                    <div id="chat-header">💬 AI Assistant</div>
+                    <div id="chat-messages"></div>
+                    <div id="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Type a message..." />
+                        <button id="chat-send">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/chat.js"></script>
+</body>
+</html>

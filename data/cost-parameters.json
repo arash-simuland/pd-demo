@@ -1,0 +1,71 @@
+{
+  "product": {
+    "type": "Industrial Equipment Component",
+    "description": "Motors, pumps, control units for manufacturing",
+    "base_unit_price": 500.0
+  },
+  "delivery": {
+    "cost_per_mile": 0.50,
+    "average_speed_mph": 50.0,
+    "notes": "Delivery cost added to unit price; delivery time based on distance"
+  },
+  "holding_costs": {
+    "unit_value": 500.0,
+    "annual_holding_rate": 0.25,
+    "daily_cost_per_unit": 0.34,
+    "components": {
+      "warehouse_space": 0.06,
+      "insurance": 0.02,
+      "obsolescence": 0.05,
+      "damage_spoilage": 0.02,
+      "opportunity_cost": 0.10
+    }
+  },
+  "production_costs": {
+    "hourly_operating_cost": 50.0,
+    "daily_fixed_cost": 3600.0,
+    "components": {
+      "labor": 25.0,
+      "energy": 15.0,
+      "consumables": 10.0
+    },
+    "cost_per_unit_by_rate": {
+      "comment": "Tiered production costs reflecting economies of scale and diminishing returns",
+      "tiers": [
+        {
+          "rate_min": 0.0,
+          "rate_max": 10.0,
+          "cost_per_unit": 10.0,
+          "description": "Low rate: High per-unit cost due to inefficiency"
+        },
+        {
+          "rate_min": 10.0,
+          "rate_max": 20.0,
+          "cost_per_unit": 8.0,
+          "description": "Medium rate: Economies of scale reduce unit cost"
+        },
+        {
+          "rate_min": 20.0,
+          "rate_max": 999.0,
+          "cost_per_unit": 7.5,
+          "description": "High rate: Diminishing returns, slight cost increase"
+        }
+      ]
+    }
+  },
+  "rate_change_costs": {
+    "cost_per_change": 400.0,
+    "time_hours": 2.0,
+    "components": {
+      "labor": 160.0,
+      "quality_inspection": 80.0,
+      "recalibration": 60.0,
+      "production_loss": 100.0
+    }
+  },
+  "demand": {
+    "expected_daily_demand": 140,
+    "typical_order_size": 50,
+    "orders_per_day": 2.8
+  }
+}

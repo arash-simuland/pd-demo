@@ -1,0 +1,43 @@
+{
+  "description": "Initial state values for resource nodes (reference only - actual state initialized in ResourceNode class)",
+  "manufacturing_centers": {
+    "default_state": {
+      "inventory": 500,
+      "production_rate": 0,
+      "target_rate": 0,
+      "machine_state": "idle",
+      "last_rate_change_time": 0,
+      "total_produced": 0,
+      "total_orders_fulfilled": 0
+    },
+    "notes": "All manufacturing centers start with same initial state"
+  },
+  "distributors": {
+    "default_state": {
+      "orders_placed": 0,
+      "orders_fulfilled": 0,
+      "total_order_quantity": 0,
+      "total_fulfilled_quantity": 0,
+      "last_order_time": 0
+    },
+    "notes": "All distributors start with same initial state"
+  },
+  "state_descriptions": {
+    "manufacturing_center": {
+      "inventory": "Current number of units in stock",
+      "production_rate": "Units produced per hour (0 = idle)",
+      "target_rate": "Desired production rate (for rate change actions)",
+      "machine_state": "Current status: 'idle', 'producing', or 'adjusting'",
+      "last_rate_change_time": "Simulation time of last rate change",
+      "total_produced": "Cumulative units produced",
+      "total_orders_fulfilled": "Cumulative orders fulfilled"
+    },
+    "distributor": {
+      "orders_placed": "Number of orders placed",
+      "orders_fulfilled": "Number of orders fulfilled",
+      "total_order_quantity": "Cumulative quantity ordered",
+      "total_fulfilled_quantity": "Cumulative quantity received",
+      "last_order_time": "Simulation time of last order"
+    }
+  }
+}
