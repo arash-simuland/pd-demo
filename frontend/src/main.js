@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup sidebar resize
     setupSidebarResize();
 
+    // Setup window resize handler
+    setupWindowResize();
+
     console.log('[Main] Initialization complete');
 });
 
@@ -156,6 +159,27 @@ function setupSidebarResize() {
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
         }
+    });
+}
+
+// =============================================================================
+// WINDOW RESIZE HANDLER
+// =============================================================================
+
+function setupWindowResize() {
+    let resizeTimeout;
+    
+    window.addEventListener('resize', () => {
+        // Debounce resize events
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (networkMap) {
+                const vizContainer = document.getElementById('visualization');
+                const width = vizContainer.clientWidth;
+                const height = vizContainer.clientHeight;
+                networkMap.resize(width, height);
+            }
+        }, 100);
     });
 }
 

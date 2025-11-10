@@ -333,6 +333,10 @@ class ProductDeliverySimulation:
 
     def reset(self):
         """Reset simulation to initial state"""
+        # Stop all running processes first
+        for node in self.graph.nodes.values():
+            node.stop()  # Stop and clear all active processes
+        
         # Recreate environment
         self.env = simpy.Environment()
 
@@ -343,6 +347,8 @@ class ProductDeliverySimulation:
         for node in self.graph.nodes.values():
             node.env = self.env
             node.reset_state()  # Reset to initial state
+            # Ensure active_processes is cleared (stop() should do this, but be explicit)
+            node.active_processes = []
 
         # Clear logs
         self.action_log.clear()

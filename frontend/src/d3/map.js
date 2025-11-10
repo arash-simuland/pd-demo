@@ -36,14 +36,19 @@ export class NetworkMap {
 
     init() {
         // Create SVG in the visualization container
+        // Use viewBox for responsive scaling instead of fixed width/height
         this.svg = d3.select(`#${this.containerId}`)
             .append('svg')
             .attr('width', this.width)
             .attr('height', this.height)
+            .attr('viewBox', `0 0 ${this.width} ${this.height}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet')
             .style('background', '#1a1a2e')
             .style('position', 'absolute')
             .style('top', '0')
-            .style('left', '0');
+            .style('left', '0')
+            .style('width', '100%')
+            .style('height', '100%');
 
         // Create main group for zoom
         this.g = this.svg.append('g');
@@ -657,12 +662,13 @@ export class NetworkMap {
         this.width = width;
         this.height = height;
 
-        // Update SVG dimensions
+        // Update SVG dimensions and viewBox for responsive scaling
         this.svg
             .attr('width', width)
-            .attr('height', height);
+            .attr('height', height)
+            .attr('viewBox', `0 0 ${width} ${height}`);
 
-        // Update projection
+        // Update projection center
         this.projection
             .translate([width / 2, height / 2]);
 
