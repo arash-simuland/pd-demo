@@ -715,11 +715,11 @@
     {
       "id": "distributor_dallas",
       "type": "distributor",
-      "name": "Dallas Distributor",
+      "name": "Fort Worth Distributor",
       "location": {
-        "lat": 32.7767,
-        "lon": -96.7970,
-        "city": "Dallas",
+        "lat": 32.7555,
+        "lon": -97.3308,
+        "city": "Fort Worth",
         "state": "TX"
       },
       "properties": {
@@ -844,11 +844,11 @@
     {
       "id": "distributor_los_angeles",
       "type": "distributor",
-      "name": "Los Angeles Distributor",
+      "name": "San Diego Distributor",
       "location": {
-        "lat": 34.0522,
-        "lon": -118.2437,
-        "city": "Los Angeles",
+        "lat": 32.7157,
+        "lon": -117.1611,
+        "city": "San Diego",
         "state": "CA"
       },
       "properties": {
@@ -973,11 +973,11 @@
     {
       "id": "distributor_denver",
       "type": "distributor",
-      "name": "Denver Distributor",
+      "name": "Colorado Springs Distributor",
       "location": {
-        "lat": 39.7392,
-        "lon": -104.9903,
-        "city": "Denver",
+        "lat": 38.8339,
+        "lon": -104.8214,
+        "city": "Colorado Springs",
         "state": "CO"
       },
       "properties": {
