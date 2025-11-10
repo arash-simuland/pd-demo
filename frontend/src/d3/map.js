@@ -377,43 +377,8 @@ export class NetworkMap {
 
         // Exit
         nodeGroups.exit().remove();
-
-        // Add labels
-        this.renderLabels();
     }
 
-    /**
-     * Render node labels
-     */
-    renderLabels() {
-        const nodesGroup = this.g.select('.nodes');
-
-        const labels = nodesGroup
-            .selectAll('text')
-            .data(this.nodes, d => d.id);
-
-        labels
-            .enter()
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('dy', -15)
-            .attr('fill', '#fff')
-            .attr('font-size', '10px')
-            .merge(labels)
-            .attr('x', d => this.projection([d.location.lon, d.location.lat])[0])
-            .attr('y', d => this.projection([d.location.lon, d.location.lat])[1])
-            .text(d => {
-                // Show just the city name
-                if (d.type === 'manufacturing_center') {
-                    return d.name.split(' ')[0]; // "Chicago" from "Chicago Manufacturing Center"
-                } else {
-                    // "New York" from "New York Distributor"
-                    return d.name.replace(' Distributor', '');
-                }
-            });
-
-        labels.exit().remove();
-    }
 
     /**
      * Get projected coordinates for a node by ID
@@ -434,7 +399,7 @@ export class NetworkMap {
     }
 
     /**
-     * Show tooltip on hover
+     * Show beautiful tooltip on hover
      */
     showTooltip(event, node) {
         this.hoveredNode = node;
@@ -442,25 +407,59 @@ export class NetworkMap {
         // Remove existing tooltip
         d3.select('#tooltip').remove();
 
-        // Create tooltip
+        // Extract city name
+        let cityName = '';
+        if (node.type === 'manufacturing_center') {
+            cityName = node.name.split(' ')[0]; // "Chicago" from "Chicago Manufacturing Center"
+        } else {
+            cityName = node.name.replace(' Distributor', ''); // "New York" from "New York Distributor"
+        }
+
+        // Create beautiful tooltip with gradient background
         const tooltip = d3.select('body')
             .append('div')
             .attr('id', 'tooltip')
             .style('position', 'absolute')
-            .style('background', 'rgba(0, 0, 0, 0.9)')
+            .style('background', 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)')
             .style('color', '#fff')
-            .style('padding', '10px')
-            .style('border-radius', '4px')
-            .style('font-size', '12px')
+            .style('padding', '12px 18px')
+            .style('border-radius', '8px')
+            .style('font-size', '14px')
+            .style('font-weight', '600')
             .style('pointer-events', 'none')
-            .style('z-index', '1000');
+            .style('z-index', '1000')
+            .style('box-shadow', '0 4px 12px rgba(0, 0, 0, 0.4)')
+            .style('border', '2px solid rgba(255, 255, 255, 0.3)')
+            .style('backdrop-filter', 'blur(10px)')
+            .style('white-space', 'nowrap')
+            .style('transition', 'opacity 0.2s ease-in-out')
+            .style('opacity', '0')
+            .text(cityName);
 
-        this.updateTooltip(node);
+        // Fade in
+        tooltip.transition().duration(200).style('opacity', '1');
 
-        // Position tooltip
+        // Position tooltip above cursor with smart positioning
+        const tooltipWidth = tooltip.node().offsetWidth || 100;
+        const tooltipHeight = tooltip.node().offsetHeight || 40;
+        const padding = 15;
+
+        let left = event.pageX - tooltipWidth / 2;
+        let top = event.pageY - tooltipHeight - padding;
+
+        // Keep tooltip within viewport
+        if (left < 10) left = 10;
+        if (left + tooltipWidth > window.innerWidth - 10) {
+            left = window.innerWidth - tooltipWidth - 10;
+        }
+        if (top < 10) {
+            // If not enough space above, show below
+            top = event.pageY + padding;
+        }
+
         tooltip
-            .style('left', (event.pageX + 10) + 'px')
-            .style('top', (event.pageY - 10) + 'px');
+            .style('left', left + 'px')
+            .style('top', top + 'px');
     }
 
     /**
@@ -470,10 +469,19 @@ export class NetworkMap {
         const tooltip = d3.select('#tooltip');
         if (tooltip.empty()) return;
 
-        // Build tooltip content
-        let content = `<strong>${node.name}</strong><br>`;
-        content += `Type: ${node.type}<br>`;
-        content += `Location: ${node.location.city}, ${node.location.state}<br><br>`;
+        // Extract city name for display
+        let cityName = '';
+        if (node.type === 'manufacturing_center') {
+            cityName = node.name.split(' ')[0];
+        } else {
+            cityName = node.name.replace(' Distributor', '');
+        }
+
+        // Build tooltip content with city name prominently displayed
+        let content = `<div style="font-size: 16px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">${cityName}</div>`;
+        content += `<div style="font-size: 11px; opacity: 0.9; margin-bottom: 6px;">${node.location.city}, ${node.location.state}</div>`;
+        content += `<div style="font-size: 10px; opacity: 0.7; text-transform: capitalize; margin-bottom: 8px;">${node.type.replace('_', ' ')}</div>`;
+        content += `<hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 8px 0;">`;
 
         // Manufacturing center - show Phase 2 financial data
         if (node.type === 'manufacturing_center') {
@@ -535,11 +543,18 @@ export class NetworkMap {
     }
 
     /**
-     * Hide tooltip
+     * Hide tooltip with fade out
      */
     hideTooltip() {
         this.hoveredNode = null;
-        d3.select('#tooltip').remove();
+        const tooltip = d3.select('#tooltip');
+        if (!tooltip.empty()) {
+            tooltip
+                .transition()
+                .duration(150)
+                .style('opacity', '0')
+                .remove();
+        }
     }
 
     /**
