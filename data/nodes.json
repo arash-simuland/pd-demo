@@ -182,6 +182,189 @@
           }
         }
       }
+    },
+    {
+      "id": "dallas_center",
+      "type": "manufacturing_center",
+      "name": "Dallas Manufacturing Center",
+      "location": {
+        "lat": 32.7767,
+        "lon": -96.7970,
+        "city": "Dallas",
+        "state": "TX"
+      },
+      "properties": {
+        "capacity": 1000,
+        "initial_inventory": 300,
+        "initial_production_rate": 16.0,
+        "max_production_rate": 28.0,
+        "machine_type": "Standard Production Line",
+        "actions": {
+          "module": "manufacturing_actions",
+          "available": [
+            {
+              "name": "continuous_production",
+              "function": "produce_batch",
+              "auto_start": true,
+              "policy_ref": "production_policy",
+              "resource": null,
+              "time": 1.0
+            },
+            {
+              "name": "process_pending_orders",
+              "function": "check_and_fulfill_orders",
+              "auto_start": true,
+              "policy_ref": "fulfillment_policy",
+              "resource": null,
+              "time": 0.1
+            },
+            {
+              "name": "process_deliveries",
+              "function": "process_deliveries",
+              "auto_start": true,
+              "policy_ref": "delivery_policy",
+              "resource": "graph",
+              "time": 0.1
+            }
+          ]
+        },
+        "policies": {
+          "production_policy": {
+            "type": "ContinuousProductionPolicy",
+            "interval": 0.0
+          },
+          "fulfillment_policy": {
+            "type": "ContinuousOrderFulfillmentPolicy",
+            "interval": 1.0
+          },
+          "delivery_policy": {
+            "type": "ContinuousOrderFulfillmentPolicy",
+            "interval": 0.5
+          }
+        }
+      }
+    },
+    {
+      "id": "los_angeles_center",
+      "type": "manufacturing_center",
+      "name": "Los Angeles Manufacturing Center",
+      "location": {
+        "lat": 34.0522,
+        "lon": -118.2437,
+        "city": "Los Angeles",
+        "state": "CA"
+      },
+      "properties": {
+        "capacity": 1000,
+        "initial_inventory": 300,
+        "initial_production_rate": 18.0,
+        "max_production_rate": 32.0,
+        "machine_type": "Standard Production Line",
+        "actions": {
+          "module": "manufacturing_actions",
+          "available": [
+            {
+              "name": "continuous_production",
+              "function": "produce_batch",
+              "auto_start": true,
+              "policy_ref": "production_policy",
+              "resource": null,
+              "time": 1.0
+            },
+            {
+              "name": "process_pending_orders",
+              "function": "check_and_fulfill_orders",
+              "auto_start": true,
+              "policy_ref": "fulfillment_policy",
+              "resource": null,
+              "time": 0.1
+            },
+            {
+              "name": "process_deliveries",
+              "function": "process_deliveries",
+              "auto_start": true,
+              "policy_ref": "delivery_policy",
+              "resource": "graph",
+              "time": 0.1
+            }
+          ]
+        },
+        "policies": {
+          "production_policy": {
+            "type": "ContinuousProductionPolicy",
+            "interval": 0.0
+          },
+          "fulfillment_policy": {
+            "type": "ContinuousOrderFulfillmentPolicy",
+            "interval": 1.0
+          },
+          "delivery_policy": {
+            "type": "ContinuousOrderFulfillmentPolicy",
+            "interval": 0.5
+          }
+        }
+      }
+    },
+    {
+      "id": "denver_center",
+      "type": "manufacturing_center",
+      "name": "Denver Manufacturing Center",
+      "location": {
+        "lat": 39.7392,
+        "lon": -104.9903,
+        "city": "Denver",
+        "state": "CO"
+      },
+      "properties": {
+        "capacity": 1000,
+        "initial_inventory": 300,
+        "initial_production_rate": 12.0,
+        "max_production_rate": 22.0,
+        "machine_type": "Standard Production Line",
+        "actions": {
+          "module": "manufacturing_actions",
+          "available": [
+            {
+              "name": "continuous_production",
+              "function": "produce_batch",
+              "auto_start": true,
+              "policy_ref": "production_policy",
+              "resource": null,
+              "time": 1.0
+            },
+            {
+              "name": "process_pending_orders",
+              "function": "check_and_fulfill_orders",
+              "auto_start": true,
+              "policy_ref": "fulfillment_policy",
+              "resource": null,
+              "time": 0.1
+            },
+            {
+              "name": "process_deliveries",
+              "function": "process_deliveries",
+              "auto_start": true,
+              "policy_ref": "delivery_policy",
+              "resource": "graph",
+              "time": 0.1
+            }
+          ]
+        },
+        "policies": {
+          "production_policy": {
+            "type": "ContinuousProductionPolicy",
+            "interval": 0.0
+          },
+          "fulfillment_policy": {
+            "type": "ContinuousOrderFulfillmentPolicy",
+            "interval": 1.0
+          },
+          "delivery_policy": {
+            "type": "ContinuousOrderFulfillmentPolicy",
+            "interval": 0.5
+          }
+        }
+      }
     }
   ],
   "distributors": [
@@ -507,6 +690,350 @@
           "sunday": 0.08
         },
         "order_size_mean": 52,
+        "order_size_std": 11,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_dallas",
+      "type": "distributor",
+      "name": "Dallas Distributor",
+      "location": {
+        "lat": 32.7767,
+        "lon": -96.7970,
+        "city": "Dallas",
+        "state": "TX"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.33,
+          "tuesday": 0.38,
+          "wednesday": 0.36,
+          "thursday": 0.41,
+          "friday": 0.47,
+          "saturday": 0.21,
+          "sunday": 0.11
+        },
+        "order_size_mean": 58,
+        "order_size_std": 12,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_houston",
+      "type": "distributor",
+      "name": "Houston Distributor",
+      "location": {
+        "lat": 29.7604,
+        "lon": -95.3698,
+        "city": "Houston",
+        "state": "TX"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.31,
+          "tuesday": 0.37,
+          "wednesday": 0.35,
+          "thursday": 0.39,
+          "friday": 0.45,
+          "saturday": 0.2,
+          "sunday": 0.09
+        },
+        "order_size_mean": 54,
+        "order_size_std": 11,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_phoenix",
+      "type": "distributor",
+      "name": "Phoenix Distributor",
+      "location": {
+        "lat": 33.4484,
+        "lon": -112.0740,
+        "city": "Phoenix",
+        "state": "AZ"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.32,
+          "tuesday": 0.36,
+          "wednesday": 0.34,
+          "thursday": 0.39,
+          "friday": 0.44,
+          "saturday": 0.23,
+          "sunday": 0.1
+        },
+        "order_size_mean": 49,
+        "order_size_std": 10,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_los_angeles",
+      "type": "distributor",
+      "name": "Los Angeles Distributor",
+      "location": {
+        "lat": 34.0522,
+        "lon": -118.2437,
+        "city": "Los Angeles",
+        "state": "CA"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.34,
+          "tuesday": 0.39,
+          "wednesday": 0.37,
+          "thursday": 0.42,
+          "friday": 0.49,
+          "saturday": 0.24,
+          "sunday": 0.12
+        },
+        "order_size_mean": 62,
+        "order_size_std": 13,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_san_francisco",
+      "type": "distributor",
+      "name": "San Francisco Distributor",
+      "location": {
+        "lat": 37.7749,
+        "lon": -122.4194,
+        "city": "San Francisco",
+        "state": "CA"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.28,
+          "tuesday": 0.33,
+          "wednesday": 0.31,
+          "thursday": 0.36,
+          "friday": 0.41,
+          "saturday": 0.18,
+          "sunday": 0.08
+        },
+        "order_size_mean": 46,
+        "order_size_std": 9,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_seattle",
+      "type": "distributor",
+      "name": "Seattle Distributor",
+      "location": {
+        "lat": 47.6062,
+        "lon": -122.3321,
+        "city": "Seattle",
+        "state": "WA"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.26,
+          "tuesday": 0.31,
+          "wednesday": 0.29,
+          "thursday": 0.34,
+          "friday": 0.39,
+          "saturday": 0.17,
+          "sunday": 0.07
+        },
+        "order_size_mean": 44,
+        "order_size_std": 9,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_denver",
+      "type": "distributor",
+      "name": "Denver Distributor",
+      "location": {
+        "lat": 39.7392,
+        "lon": -104.9903,
+        "city": "Denver",
+        "state": "CO"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.3,
+          "tuesday": 0.35,
+          "wednesday": 0.33,
+          "thursday": 0.37,
+          "friday": 0.43,
+          "saturday": 0.2,
+          "sunday": 0.09
+        },
+        "order_size_mean": 47,
+        "order_size_std": 10,
+        "actions": {
+          "module": "order_actions",
+          "available": [
+            {
+              "name": "generate_orders",
+              "function": "check_and_generate_order",
+              "auto_start": true,
+              "policy_ref": "order_generation_policy",
+              "resource": "graph",
+              "time": 0.01
+            }
+          ]
+        },
+        "policies": {
+          "order_generation_policy": {
+            "type": "ContinuousOrderGenerationPolicy",
+            "interval": 2.0
+          }
+        }
+      }
+    },
+    {
+      "id": "distributor_charlotte",
+      "type": "distributor",
+      "name": "Charlotte Distributor",
+      "location": {
+        "lat": 35.2271,
+        "lon": -80.8431,
+        "city": "Charlotte",
+        "state": "NC"
+      },
+      "properties": {
+        "order_probability": {
+          "monday": 0.31,
+          "tuesday": 0.36,
+          "wednesday": 0.34,
+          "thursday": 0.38,
+          "friday": 0.44,
+          "saturday": 0.21,
+          "sunday": 0.1
+        },
+        "order_size_mean": 51,
         "order_size_std": 11,
         "actions": {
           "module": "order_actions",
