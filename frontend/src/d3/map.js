@@ -407,13 +407,11 @@ export class NetworkMap {
         // Remove existing tooltip
         d3.select('#tooltip').remove();
 
-        // Extract city name
-        let cityName = '';
-        if (node.type === 'manufacturing_center') {
-            cityName = node.name.split(' ')[0]; // "Chicago" from "Chicago Manufacturing Center"
-        } else {
-            cityName = node.name.replace(' Distributor', ''); // "New York" from "New York Distributor"
-        }
+        // Format: "City, ST" as title
+        const cityState = `${node.location.city}, ${node.location.state}`;
+        const nodeType = node.type.replace('_', ' ').split(' ').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
 
         // Create beautiful tooltip with gradient background
         const tooltip = d3.select('body')
@@ -424,17 +422,14 @@ export class NetworkMap {
             .style('color', '#fff')
             .style('padding', '12px 18px')
             .style('border-radius', '8px')
-            .style('font-size', '14px')
-            .style('font-weight', '600')
             .style('pointer-events', 'none')
             .style('z-index', '1000')
             .style('box-shadow', '0 4px 12px rgba(0, 0, 0, 0.4)')
             .style('border', '2px solid rgba(255, 255, 255, 0.3)')
             .style('backdrop-filter', 'blur(10px)')
-            .style('white-space', 'nowrap')
             .style('transition', 'opacity 0.2s ease-in-out')
             .style('opacity', '0')
-            .text(cityName);
+            .html(`<div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">${cityState}</div><div style="font-size: 10px; opacity: 0.9;">${nodeType}</div>`);
 
         // Fade in
         tooltip.transition().duration(200).style('opacity', '1');
@@ -469,18 +464,17 @@ export class NetworkMap {
         const tooltip = d3.select('#tooltip');
         if (tooltip.empty()) return;
 
-        // Extract city name for display
-        let cityName = '';
-        if (node.type === 'manufacturing_center') {
-            cityName = node.name.split(' ')[0];
-        } else {
-            cityName = node.name.replace(' Distributor', '');
-        }
+        // Build tooltip content with "City, ST" as title
+        const cityState = `${node.location.city}, ${node.location.state}`;
+        const nodeType = node.type.replace('_', ' ').split(' ').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
 
-        // Build tooltip content with city name prominently displayed
-        let content = `<div style="font-size: 16px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">${cityName}</div>`;
-        content += `<div style="font-size: 11px; opacity: 0.9; margin-bottom: 6px;">${node.location.city}, ${node.location.state}</div>`;
-        content += `<div style="font-size: 10px; opacity: 0.7; text-transform: capitalize; margin-bottom: 8px;">${node.type.replace('_', ' ')}</div>`;
+        // Title: City, ST (large, prominent)
+        let content = `<div style="font-size: 18px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px;">${cityState}</div>`;
+        // Type below title
+        content += `<div style="font-size: 11px; opacity: 0.85; margin-bottom: 8px; text-transform: capitalize;">${nodeType}</div>`;
+        // Separator line
         content += `<hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 8px 0;">`;
 
         // Manufacturing center - show Phase 2 financial data
